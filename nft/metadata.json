@@ -1,0 +1,12 @@
+{
+	"name" : "BenjiNFT",
+	"description" : "Just a picture of a Benjamite leaving the Kumite after destroying the Yakuzans.",
+	"image" : "https://gateway.pinata.cloud/ipfs/QmdxhG55zGTgksnzw11YHshdVQUd1zbogsjZF5MtoBykJG",
+	"attributes" : [
+		{ "trait_type" : "Base", "value" : "Kumite et Shadow-Realm" },
+		{ "trait_type" : "Eye", "value" : "Alien Googles" },
+		{ "trait_type" : "Mouth", "value" : "Siber Toothed with Long Beards" },
+		{ "trait_type" : "Level", "value" : 10 },
+		{ "trait_type" : "Personality", "value" : "Conqueror" }
+	]
+}
