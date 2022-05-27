@@ -22,11 +22,9 @@ contract BenjiNFT is ERC721Enumerable, Ownable {
   string baseURI;
   string public baseExtension = ".json";
   uint256 public cost = 5 ether;
-  uint256 public maxSupply = 100;
-  uint256 public maxMintAmount = 5;
+  uint256 public maxSupply = 10;
+  uint256 public maxMintAmount = 1;
   bool public paused = true;
-  bool public revealed = false;
-  string public notRevealedUri;
 
 // ==========================================================================================================
 // Initializng my constructor function which is called once the contract is deployed. It takes some arguments 
@@ -34,8 +32,11 @@ contract BenjiNFT is ERC721Enumerable, Ownable {
 // ==========================================================================================================
   constructor(
     string memory _name,
-    string memory _symbol
-  ) ERC721(_name, _symbol) {}
+    string memory _symbol,
+    string memory initBaseURI
+  ) ERC721(_name, _symbol) {
+    setBaseURI(initBaseURI);
+  }
 
 // ===============================================================================
 // Internal Function which is only called from this contract or derived contracts.
@@ -93,25 +94,14 @@ contract BenjiNFT is ERC721Enumerable, Ownable {
   // The tokenURI function returns a URI of a given tokenID from the owner's wallet. 
   // It prefixes the baseURI set by the owner to the tokenID and baseExtension.
   // ===============================================================================
-  function tokenURI(uint256 tokenId)
+  function tokenURI()
     public
     view
-    virtual
-    override
     returns (string memory)
   {
-    require(
-      _exists(tokenId),
-      "ERC721Metadata: URI query for nonexistent token"
-    );
-    
-    if(revealed == false) {
-        return notRevealedUri;
-    }
-
     string memory currentBaseURI = _baseURI();
     return bytes(currentBaseURI).length > 0
-        ? string(abi.encodePacked(currentBaseURI, tokenId.toString(), baseExtension))
+        ? string(abi.encodePacked(currentBaseURI, baseExtension))
         : "";
   }
 
@@ -119,13 +109,6 @@ contract BenjiNFT is ERC721Enumerable, Ownable {
 // OnlyOwner Functions which leverages the onlyOwner modifier of the Ownable.sol contract from OpenZepplin.
 // This asserts that only the owner/deployer of this smart contract can call these functions.
 // ========================================================================================================
-
-  // =================================================================
-  // The reveal function which reveals the tokenURIs of the BenjiNFTs.
-  // =================================================================
-  function reveal() public onlyOwner {
-    revealed = true;
-  }
   
   // ===================================================
   // The setCost function sets the cost of the BenjiNFT.
@@ -139,14 +122,6 @@ contract BenjiNFT is ERC721Enumerable, Ownable {
   // =====================================================================================
   function setmaxMintAmount(uint256 _newmaxMintAmount) public onlyOwner {
     maxMintAmount = _newmaxMintAmount;
-  }
-  
-  // ========================================================================================================
-  // The setNotRevealedURI function sets notRevealedUri, this is used as the tokenURI when revealed is false.
-  // The aim of this function is to hide the tokenURIs of the BenjiNFTs till the totalSupply() is minted. 
-  // ========================================================================================================
-  function setNotRevealedURI(string memory _notRevealedURI) public onlyOwner {
-    notRevealedUri = _notRevealedURI;
   }
 
   // ==============================================================================================
